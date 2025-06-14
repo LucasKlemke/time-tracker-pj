@@ -2,6 +2,8 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Jersey_10 } from "next/font/google"
 import "./globals.css"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 const jersey = Jersey_10({ weight: ["400"] })
 
@@ -17,7 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={jersey.className}>{children}</body>
+      <SidebarProvider>
+        <AppSidebar />
+
+      <body className={jersey.className}>
+        <SidebarTrigger/>{children}</body>
+            </SidebarProvider>
     </html>
   )
 }

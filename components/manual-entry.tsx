@@ -8,13 +8,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { DatePicker } from "@/components/ui/date-picker"
 
 interface ManualEntryProps {
-  onActivitySaved: () => void
+  onActivitySaved: () => void 
 }
 
 export function ManualEntry({ onActivitySaved }: ManualEntryProps) {
   const [title, setTitle] = useState("")
+  const [date, setDate] = useState(() => {
+    // Default to today in yyyy-mm-dd format
+    const today = new Date()
+    const yyyy = today.getFullYear()
+    const mm = String(today.getMonth() + 1).padStart(2, "0")
+    const dd = String(today.getDate()).padStart(2, "0")
+    return `${yyyy}-${mm}-${dd}`
+  })
   const [description, setDescription] = useState("")
   const [hours, setHours] = useState("")
   const [minutes, setMinutes] = useState("")
@@ -46,6 +55,7 @@ export function ManualEntry({ onActivitySaved }: ManualEntryProps) {
           description,
           duration: totalMinutes,
           isManual: true,
+          date, // include date in payload if needed
         }),
       })
 
@@ -54,6 +64,12 @@ export function ManualEntry({ onActivitySaved }: ManualEntryProps) {
         setDescription("")
         setHours("")
         setMinutes("")
+        // Reset date to today after save
+        const today = new Date()
+        const yyyy = today.getFullYear()
+        const mm = String(today.getMonth() + 1).padStart(2, "0")
+        const dd = String(today.getDate()).padStart(2, "0")
+        setDate(`${yyyy}-${mm}-${dd}`)
         onActivitySaved()
       }
     } catch (error) {
@@ -77,6 +93,17 @@ export function ManualEntry({ onActivitySaved }: ManualEntryProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex: Desenvolvimento de website"
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="date">Data da Atividade</Label>
+            <Input
+              id="date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Ex: 2025-01-01"
               required
             />
           </div>

@@ -58,7 +58,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { title, description, duration, isManual, startTime, endTime } = body
+    const { title, description, duration, isManual, startTime, endTime, date } = body
 
     // Buscar valor/hora do usuário
     const user = await prisma.user.findFirst({
@@ -79,6 +79,7 @@ export async function POST(request: Request) {
         isManual: Boolean(isManual),
         startTime: startTime ? new Date(startTime) : null,
         endTime: endTime ? new Date(endTime) : null,
+        date: date ? new Date(date) : new Date(),
         value,
         userId: "default-user",
       },
